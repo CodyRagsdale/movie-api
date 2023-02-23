@@ -23,6 +23,123 @@
             information about their favorite movies.
         </p>
     </main>
+    <table>
+        <tr>
+            <th>Request</th>
+            <th>URL</th>
+            <th>Response</th>
+            <th>Request Body Data Format</th>
+            <th>Example Request Body</th>
+            <th>Response Body Data Format</th>
+            <th>Example Response Body</th>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/movies</td>
+            <td>Return a list of ALL movies</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>Array of movie objects</td>
+            <td>'[{"title": "The Warriors", "director": "Walter Hill", "yearReleased": 1979, "genre": "Action", "actors": ["Michael
+            Beck", "James Remar", "Dorsey Wright"], "plotSummary": "In a dystopian future, a charismatic leader summons the street
+            gangs of New York City in a bid to take it over. When he is killed, The Warriors are falsely blamed and now must fight
+            their way home while every other gang is hunting them down."}, {"title": "True Romance", "director": "Tony Scott",
+            "yearReleased": 1993, "genre": "Crime", "actors": ["Christian Slater", "Patricia Arquette", "Dennis Hopper"],
+            "plotSummary": "In Detroit, a lonely pop culture geek marries a call girl, steals cocaine from her pimp, and tries to
+            sell it in Hollywood. Meanwhile, the owners of the cocaine, the Mob, track them down in an attempt to reclaim it."}]'</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/movies/:title</td>
+            <td>Return data about a single movie by title</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>Movie object</td>
+            <td>'{"title": "The Warriors", "director": "Walter Hill", "yearReleased": 1979, "genre": "Action", "actors": ["Michael Beck",
+            "James Remar", "Dorsey Wright"], "plotSummary": "In a dystopian future, a charismatic leader summons the street gangs of
+            New York City in a bid to take it over. When he is killed, The Warriors are falsely blamed and now must fight their way
+            home while every other gang is hunting them down."}'</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/genres/:name</td>
+            <td>Return data about a genre by name</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>Genre object</td>
+            <td>'{"name": "Action", "description": "A film genre that emphasizes exciting action sequences."}'</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/directors/:name</td>
+            <td>Return data about a director by name</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>Director object</td>
+            <td>'{"name": "Walter Hill", "bio": "Walter Hill is a director, writer, and producer known for his work on The Warriors, 48
+            Hrs., and The Long Riders.", "birthYear": 1942, "deathYear": N/A}'</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/users</td>
+            <td>Allow new users to register</td>
+            <td>JSON</td>
+            <td>'{"username": "johndoe", "password": "mypassword", "email": "johndoe@example.com", "birthdate": "1990-01-01"}'</td>
+            <td>User object</td>
+            <td>'{"username": "johndoe", "email": "johndoe@example.com", "birthdate": "1990-01-01"}'</td>
+        </tr>
+        <tr>
+            <td>PUT</td>
+            <td>/users/:username</td>
+            <td>Allow users to update their user info (username)</td>
+            <td>JSON</td>
+            <td>'{"username": "newusername"}'</td>
+            <td>User object</td>
+            <td>'{"username": "newusername", "email": "johndoe@example.com", "birthdate": "1990-01-01"}'</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/users/:username/movies</td>
+            <td>Allow users to add a movie to their list of favorites</td>
+            <td>Movie object</td>
+            <td>'{
+            "title": "The movie's title",
+            "director": "The movie's director",
+            "yearReleased": "The year the movie was released",
+            "genre": "The movie's genre",
+            "actors": ["Actor 1", "Actor 2", "Actor 3"],
+            "plotSummary": "A brief summary of the movie's plot"
+            }'</td>
+            <td>Movie object</td>
+            <td>'{"username": "johndoe"
+                "title": "The movie's title",
+                "director": "The movie's director",
+                "yearReleased": "The year the movie was released",
+                "genre": "The movie's genre",
+                "actors": ["Actor 1", "Actor 2", "Actor 3"],
+                "plotSummary": "A brief summary of the movie's plot"
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/users/:username/movies/:movieID</td>
+            <td>Allow users to remove a movie from their list of favorites</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>A JSON object confirming the movie was removed from the user's favorites list</td>
+            <td>'{"message": "The movie with ID '12345' was removed from the user's favorite movies list."}'</td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/users/:username</td>
+            <td>Allow existing users to deregister</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>A JSON object confirming the user's account was deleted</td>
+            <td>{"message": "The user with username 'johndoe' has been successfully deleted."}</td>
+        </tr>
+    </table>
 </body>
 
 </html>

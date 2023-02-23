@@ -1,9 +1,14 @@
 const express = require('express');
 const morgan = require('morgan');
+const uuid = require('uuid');
+const bodyParser = require('body-parser');
 
 const app = express();
 
-const topTenMovies = [   {
+app.use(bodyParser.json());
+app.use(morgan('common'));
+
+let movies = [   {
     title: 'The Warriors',
     director: 'Walter Hill',
     yearReleased: 1979,
@@ -86,16 +91,56 @@ const topTenMovies = [   {
 ];
 
 app.get('/movies', (req, res) => {
-  res.json(topTenMovies);
+  res.json(movies);
 });
 
-app.get('/', (req, res) => {
-  res.send('Welcome to my movie API!');
+app.get('/movies/:title', (req, res) => {
+  const movieTitle = req.params.title;
+  const movie = movies.find(m => m.title === movieTitle);
+  if (movie) {
+    res.json(movie);
+  } else {
+    res.status(404).send('Movie with title "${movieTitle}" not found.');
+  }
 });
 
-app.use(express.static('public'));
+app.get('/movies/:genre', (req, res) => {
+  res.send('Allow users to search by Genre name')
+});
 
-app.use(morgan('common'));
+app.get('/movies/:name', (req, res) => {
+  res.send('Allow users to search by Director name')
+  }
+});
+
+app.post('/users', (req, res) => {
+  let newUser = req.body;
+
+  if(!newUser.name) {
+    const message = 'Missing "name" in request body';
+    res.status(400).send(message);
+  } else {
+    newUser.id = uuid.v4();
+    users.push(newUser);
+    res.status(201).send(newUser);
+  }
+});
+
+app.put('/users/:username', (req, res) => {
+  res.send('Allow users to update their user info (username) $(req.params.username');
+});
+
+app.post('/users/:username/movies', (req, res) => {
+  res.send('Allow users to add a movie to their list of favorites for user ${req.params.username}');
+});
+
+app.delete('/users/:username/movies/:movieID', (req, res) => {
+  res.send('Allow users to remove a movie ${req.params.movieID} from their list of favorites for user ${req.params.username}');
+});
+
+app.delete('/users/:username', (req, res) => {
+  res.send('Allow users to deregister (showing only a text that a user email has been removed)');
+});
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
