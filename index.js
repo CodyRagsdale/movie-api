@@ -104,12 +104,23 @@ app.get('/movies/:title', (req, res) => {
   }
 });
 
-app.get('/movies/:genre', (req, res) => {
-  res.send('Allow users to search by Genre name')
+app.get('/movies/genres/:genre', (req, res) => {
+  const genre = req.params.genre;
+  const moviesWithGenre = movies.filter(m => m.genre === genre);
+  if (moviesWithGenre.length > 0) {
+    res.json(moviesWithGenre);
+  } else {
+    res.status(404).send(`No movies found with genre "${genre}".`);
+  }
 });
 
-app.get('/movies/:name', (req, res) => {
-  res.send('Allow users to search by Director name')
+app.get('/movies/directors/:name', (req, res) => {
+  const directorName = req.params.name;
+  const director = movies.find(m => m.director === directorName);
+  if (director) {
+    res.json(director);
+  } else {
+    res.status(404).send(`No director with name "${directorName}" found.`);
   }
 });
 
