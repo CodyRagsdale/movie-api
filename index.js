@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const uuid = require('uuid');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const { check, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
@@ -9,6 +11,7 @@ const Movies = Models.Movie
 const Users = Models.User
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common'));
@@ -96,10 +99,29 @@ app.get('/users/:Username', (req, res) => {
 
 
 //Register new users
-app.post('/users', (req, res) => {
-  Users.findOne({ username: req.body.username })
+app.post('/users',
+  // Validation logic here for request
+  // You can either use a chain of methods like .not().isEmpty() to verify the field is not empty
+  // or use .isLength({mind: 5}) to enforce a minimum character length of 5
+  [
+    check('username', 'username is required').isLength({ min: 5 }),
+    check('username', 'username contains non alphanumeric characters - not allowed').isAlphanumeric(),
+    check('password', 'password is required').not().isEmpty(),
+    check('email', 'email does not appear to be valid').isEmail()
+  ], (req, res) => {
+
+  // Check the validation object for errors
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let hashedPassword = Users.hashPassword(req.body.password)
+  Users.findOne({ username: req.body.username }) // Search to see if a user with the requested username already exists
     .then((user) => {
       if (user) {
+        // If the user is found, send a response that it already exists
         return res.status(400).send(req.body.username + 'already exists');
       } else {
         Users
@@ -113,7 +135,7 @@ app.post('/users', (req, res) => {
           .catch((error) => {
             console.error(error);
             res.status(500).send('Error: ' + error);
-          })
+          });
 
       }
     })
@@ -134,11 +156,26 @@ app.post('/users', (req, res) => {
   (required)
   Birthday: Date
 }*/
-app.put('/users/:username', (req, res) => {
+app.put('/users/:username', [
+  // Validation logic here for request
+  check('username', 'Username is required').isLength({ min: 5 }),
+  check('username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('password', 'Password is required').not().isEmpty(),
+  check('email', 'Email does not appear to be valid').isEmail()
+], (req, res) => {
+  // Check the validation object for errors
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  const hashedPassword = Users.hashPassword(req.body.password);
+
   Users.findOneAndUpdate({ username: req.params.username }, {
     $set: {
       username: req.body.username,
-      password: req.body.password,
+      password: hashedPassword,
       email: req.body.email,
       birthday: req.body.birthday
     }
@@ -207,8 +244,7 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-const port = 8080;
-
-app.listen(port, () => {
-  console.log(`Your app is listening on port ${port}.`);
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0', () => {
+  console.log('Listening on Port ' + port)
 });
