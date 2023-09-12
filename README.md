@@ -35,7 +35,7 @@ This project serves as the API layer for two front-end projects:
 
 ## Technologies
 
-- TypeScript
+- JavaScript
 - Node.js
 - Express.js
 - MongoDB
