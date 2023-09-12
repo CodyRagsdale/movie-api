@@ -1,6 +1,6 @@
 # movie-api
 
-![Node.js CI](https://github.com/CodyRagsdale/movie-api/workflows/Node.js%20CI/badge.svg) ![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ## Table of Contents
 
