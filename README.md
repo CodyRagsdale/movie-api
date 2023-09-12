@@ -16,7 +16,7 @@
 
 ## Introduction
 
-Welcome to `movie-api`, a robust server-side component that powers the "myFlix" web application. Written in TypeScript, this API is built using a robust stack featuring Node.js, Express, and MongoDB. The API serves as the backbone for managing movie data, user profiles, and other essential features for myFlix. It is designed to be easily extensible and works seamlessly with front-end projects that consume its services.
+Welcome to `movie-api`, a robust server-side component that powers the "myFlix" web application. Written in JavaScript, this API is built using a robust stack featuring Node.js, Express, and MongoDB. The API serves as the backbone for managing movie data, user profiles, and other essential features for myFlix. It is designed to be easily extensible and works seamlessly with front-end projects that consume its services.
 
 This project serves as the API layer for two front-end projects:
 
